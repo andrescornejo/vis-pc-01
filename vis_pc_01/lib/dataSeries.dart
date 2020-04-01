@@ -1,11 +1,8 @@
-import 'package:charts_flutter/flutter.dart' as charts;
-import 'package:flutter/foundation.dart';
-
 //This class will contain all the data that will be processed by the graphs.
 
 class DataSeries{
   String _age, _sex, _province;
-  String _eyeDisabled,
+  var _eyeDisabled,
       _earDisabled,
       _talkDisabled,
       _walkDisabled,
@@ -13,18 +10,30 @@ class DataSeries{
       _intellectDisabled,
       _mindDisabled;
 
-  DataSeries(
-    this._age,
-    this._sex,
-    this._province,
-    this._eyeDisabled,
-    this._earDisabled,
-    this._talkDisabled,
-    this._walkDisabled,
-    this._armDisabled,
-    this._intellectDisabled,
-    this._mindDisabled
-  );
+  DataSeries(String pAge, String pEyes, String pEars, String pTalk,
+      String pWalk, String pArm, String pIntel, String pMind,
+      String pSex, String pProvince){
+
+    this._age = pAge;
+    this._sex =  pSex;
+    this._province = pProvince;
+
+    this._eyeDisabled = int.tryParse(pEyes) ?? -1;
+
+    this._earDisabled = int.tryParse(pEars) ?? -1;
+
+    this._talkDisabled = int.tryParse(pTalk) ?? -1;
+
+    this._walkDisabled = int.tryParse(pWalk) ?? -1;
+
+    this._armDisabled = int.tryParse(pArm) ?? -1;
+
+    this._intellectDisabled = int.tryParse(pIntel) ?? -1;
+
+    this._mindDisabled = int.tryParse(pMind) ?? -1;
+
+    print(this._mindDisabled);
+  }
 
   factory DataSeries.fromJSON(Map<String,dynamic> json){
     if(json == null){

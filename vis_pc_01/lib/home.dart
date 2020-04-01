@@ -31,7 +31,7 @@ class HomePage extends StatelessWidget {
                         fontSize: 25.0,
                         fontWeight: FontWeight.bold
                       ),),
-                      subtitle: Text(dataList[index].province),
+                      subtitle: Text(dataList[index].talkDisabled),
                     );
               });
             } else {
