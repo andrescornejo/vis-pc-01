@@ -1,9 +1,12 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:vispc01/dataSeries.dart';
+import 'package:vispc01/dataFilter.dart';
+import 'package:vispc01/infoScreen.dart';
 
 import 'package:vispc01/bubble.dart';
+import 'dart:convert';
+
+
 
 class HomePage extends StatelessWidget {
 
@@ -16,14 +19,14 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context){
     return Scaffold(
-        resizeToAvoidBottomInset: false, // set it to false
-
+      resizeToAvoidBottomInset: false, // set it to false
       appBar: AppBar(
         title: Text("vis-pc-01"),
+        backgroundColor: Colors.deepPurple,
       ),
       body: Column(children: <Widget>[
         Container(
-          height: 539,
+          height: 539,    //Hardcoded :( This is for a 1080 x 1920 screen.
           padding: EdgeInsets.all(10),
           child: Card(
             child: Padding(
@@ -47,7 +50,11 @@ class HomePage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             FlatButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(context,
+                MaterialPageRoute(builder: (context) => DataFilter())
+                );
+              },
               child: Icon(Icons.filter_list),
               disabledColor: Colors.lightBlue[600],
             ),
@@ -57,7 +64,11 @@ class HomePage extends StatelessWidget {
               disabledColor: Colors.lightBlue[600],
             ),
             FlatButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => InfoScreen())
+                );
+              },
               child: Icon(Icons.info),
               disabledColor: Colors.lightBlue[600],
             ),
