@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:vispc01/dataSeries.dart';
-import 'package:vispc01/dataFilter.dart';
-import 'package:vispc01/infoScreen.dart';
+import 'package:vispc01/dataFilterUI.dart';
+import 'package:vispc01/infoScreenUI.dart';
 
 import 'package:vispc01/bubble.dart';
 import 'dart:convert';
@@ -52,7 +52,7 @@ class HomePage extends StatelessWidget {
             FlatButton(
               onPressed: () {
                 Navigator.push(context,
-                MaterialPageRoute(builder: (context) => DataFilter())
+                MaterialPageRoute(builder: (context) => DataFilterUI())
                 );
               },
               child: Icon(Icons.filter_list),
@@ -66,7 +66,7 @@ class HomePage extends StatelessWidget {
             FlatButton(
               onPressed: () {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => InfoScreen())
+                    MaterialPageRoute(builder: (context) => InfoScreenUI())
                 );
               },
               child: Icon(Icons.info),
@@ -77,4 +77,37 @@ class HomePage extends StatelessWidget {
       ],)
     );
   }
+
+//  @override
+//  Widget build(BuildContext context){
+//    return Scaffold(
+//        appBar: AppBar(
+//          title: Text("Data Parser"),
+//        ),
+//        body: Container(
+//            child: FutureBuilder(
+//                future: getDataFromJSON(context),
+//                builder: (context,data){
+//                  if(data.hasData){
+//                    List<DataSeries> dataList = data.data;
+//                    return ListView.builder(
+//                        itemCount: dataList.length,
+//                        itemBuilder: (context, index){
+//                          return ListTile(
+//                            title: Text(dataList[index].age, style: TextStyle(
+//                                fontSize: 25.0,
+//                                fontWeight: FontWeight.bold
+//                            ),),
+//                            subtitle: Text(dataList[index].province),
+//                          );
+//                        });
+//                  } else {
+//                    return Center(child: CircularProgressIndicator(),);
+//                  }
+//                }
+//            )
+//        )
+//    );
+//  }
+
 }

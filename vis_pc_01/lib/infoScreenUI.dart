@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class InfoScreen extends StatelessWidget {
+class InfoScreenUI extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

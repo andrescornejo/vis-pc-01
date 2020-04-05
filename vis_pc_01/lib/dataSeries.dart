@@ -37,17 +37,18 @@ class DataSeries{
 
   factory DataSeries.fromJSON(Map<String,dynamic> json){
     if(json == null){
+      print("Error handling json file");
       return null;
     } else {
       return DataSeries(
         json["age"],
-        json["eyeDisabled"],
-        json["earDisabled"],
-        json["talkDisabled"],
-        json["walkDisabled"],
-        json["armDisabled"],
-        json["intellectDisabled"],
-        json["mindDisabled"],
+        json["eyes"],
+        json["ears"],
+        json["talk"],
+        json["walk"],
+        json["arms"],
+        json["intellect"],
+        json["mental"],
         json["sex"],
         json["province"]
       );
