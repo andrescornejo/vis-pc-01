@@ -17,7 +17,7 @@ class DataFilterUIState extends State<DataFilterUI>{
             Navigator.pop(context);
           }),
           title: new Text('Filtro de variables'),
-          backgroundColor: Colors.deepPurple;
+          backgroundColor: Colors.deepPurple,
       ),
       body: ListView(
         children: <Widget>[

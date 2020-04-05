@@ -3,7 +3,7 @@ import 'package:vispc01/dataSeries.dart';
 import 'package:vispc01/dataFilterUI.dart';
 import 'package:vispc01/infoScreenUI.dart';
 
-import 'package:vispc01/bubble.dart';
+import 'package:vispc01/chartBubble.dart';
 import 'dart:convert';
 
 
