@@ -1,4 +1,9 @@
-//This class will contain all the data that will be processed by the graphs.
+/* Author: Andrés Cornejo
+ * Class: DataSeries
+ * Description: Generates an object that contains all the information given by the source json.
+ *              It is meant to be used in a list.
+ */
+
 
 class DataSeries{
   String _age, _sex, _province;
@@ -32,7 +37,6 @@ class DataSeries{
 
     this._mindDisabled = int.tryParse(pMind) ?? -1;
 
-    print(this._mindDisabled);
   }
 
   factory DataSeries.fromJSON(Map<String,dynamic> json){
@@ -53,6 +57,22 @@ class DataSeries{
         json["province"]
       );
     }
+  }
+
+  String toString(){
+    String output =  "Age group: " + this.age + "\n";
+    output += "Eye dis: " + this._eyeDisabled.toString() + "\n";
+    output += "Ears dis: " + this._earDisabled.toString() + "\n";
+    output += "Talk dis: " + this._talkDisabled.toString() + "\n";
+    output += "Walk dis: " + this._walkDisabled.toString() + "\n";
+    output += "Arm dis: " + this._armDisabled.toString() + "\n";
+    output += "Intellect dis: " + this._intellectDisabled.toString() + "\n";
+    output += "Mental dis: " + this._mindDisabled.toString() + "\n";
+    output += "Sex: " + this._sex + "\n";
+    output += "Province: " + this._province + "\n";
+    output += "\n";
+
+    return output;
   }
 
   get age => this._age;

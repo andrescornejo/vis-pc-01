@@ -12,18 +12,26 @@
 /// be color with the color of the data.
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
+import 'package:vispc01/logic/disabilitySeries.dart';
 
 class ShapesScatterPlotChart extends StatelessWidget {
-  final List<charts.Series> seriesList = _createSampleData();
-  final bool animate = true;
+  final List<charts.Series> seriesList;
+  final bool animate;
 
-  ShapesScatterPlotChart();
+  ShapesScatterPlotChart(this.seriesList, {this.animate});
 
   /// Creates a [ScatterPlotChart] with sample data and no transition.
   factory ShapesScatterPlotChart.withSampleData() {
-    return new ShapesScatterPlotChart();
+    return new ShapesScatterPlotChart(
+      _createSampleData(),
+      // Disable animations for image tests.
+      animate: false,
+    );
   }
 
+  factory ShapesScatterPlotChart.fromDisabilityList(List<DisabilitySeries> inputList){
+    return null;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,23 +49,13 @@ class ShapesScatterPlotChart extends StatelessWidget {
   /// Create one series with sample hard coded data.
   static List<charts.Series<LinearSales, int>> _createSampleData() {
     final data = [
-      new LinearSales(0, 5, 3.0, 'circle', null, null),
-      new LinearSales(10, 25, 5.0, null, null, null),
-      new LinearSales(12, 75, 4.0, null, null, null),
+      new LinearSales(2010, 5, 3.0, 'circle', null, null),
+      new LinearSales(2011, 25, 5.0, null, null, null),
+      new LinearSales(2012, 75, 4.0, null, null, null),
       // Render a hollow circle, filled in with white.
       new LinearSales(
           13, 225, 5.0, 'circle', charts.MaterialPalette.white, 2.0),
-      new LinearSales(16, 50, 4.0, null, null, null),
-      new LinearSales(24, 75, 3.0, null, null, null),
-      new LinearSales(25, 100, 3.0, 'circle', null, null),
-      new LinearSales(34, 150, 5.0, null, null, null),
-      new LinearSales(37, 10, 4.5, null, null, null),
-      // Render a hollow circle, filled in with white.
-      new LinearSales(
-          45, 300, 8.0, 'circle', charts.MaterialPalette.white, 2.0),
-      new LinearSales(52, 15, 4.0, null, null, null),
-      // Render a hollow square, filled in with white.
-      new LinearSales(56, 200, 7.0, null, charts.MaterialPalette.white, 2.0),
+      new LinearSales(2013, 50, 4.0, null, null, null),
     ];
 
     final maxMeasure = 300;

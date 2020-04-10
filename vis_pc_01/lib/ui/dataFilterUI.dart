@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:vispc01/globals.dart' as globals;
+import 'package:vispc01/libraries/globals.dart' as globals;
 
 class DataFilterUI extends StatefulWidget {
   @override

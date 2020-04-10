@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:vispc01/home.dart';
+import 'package:vispc01/ui/home.dart';
 
 void main() => runApp(MyApp());
 
