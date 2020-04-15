@@ -23,7 +23,7 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       resizeToAvoidBottomInset: false, // set it to false
       appBar: AppBar(
-        title: Text("vis-pc-01"),
+        title: Text("Población con discapacidad en CR"),
         backgroundColor: Colors.deepPurple,
       ),
       body: Flex(

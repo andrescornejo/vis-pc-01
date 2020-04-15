@@ -11,10 +11,10 @@
  */
 
 import 'dart:convert';
-import 'dart:ui';
 
+import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
-import 'package:vispc01/charts/scatterPlotChart.dart';
+import 'package:vispc01/charts/barChart.dart';
 import 'package:vispc01/logic/dataSeries.dart';
 import 'package:vispc01/logic/disabilitySeries.dart';
 import 'package:vispc01/libraries/globals.dart' as globals;
@@ -40,18 +40,21 @@ class DataProviderState extends State<DataProvider>{
 
   @override
   Widget build(BuildContext context) {
-    rebuildDisabilityLists(context);
+    buildUnfilteredList(context);
+    buildDisabilityLists();
     masterFilter();
-    printData();
-    buildHelper();
-    return Column(
-      children: widgetList,
-    );
-//    return Text("penis");
+
+    print(eyeDisabilityList.toString());
+
+
+//    masterFilter(this.earDisabilityList);
+    if(widgetList.isEmpty)
+      widgetList.add(Text("List Empty"));
+
+    return Column(children: widgetList);
   }
 
-  void buildHelper(){
-    widgetList.clear();
+  void buildHelper(List<DisabilitySeries> inputList, String provinceName, String disabilityName){
     widgetList.add(Container(
         height: 520,    //Hardcoded :( This is for a 1080 x 1920 screen.
         padding: EdgeInsets.all(10),
@@ -60,43 +63,77 @@ class DataProviderState extends State<DataProvider>{
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
                   children: <Widget>[
-                    Text("Visualización: Población con discapacidad en Costa Rica",
+                    Text("Población con discapacidad " + disabilityName + " en " + provinceName,
                       style: Theme.of(context).textTheme.body2,
                     ),
                     Expanded(
-                        child: ShapesScatterPlotChart.withSampleData() //CHART GOES HERE
+                        child: chartTypeSelector(inputList) //CHART GOES HERE
                     )
                   ],
                 )
             )
         )
-    ),);
-  }
-
-  Container chartBuilder(){
-
+    ),
+    );
   }
 
   /* The master filter
 
    */
   void masterFilter(){
-    if(globals.disblEYES)
-      filterList(eyeDisabilityList);
+    //EYE DISABILITY LIST
+    if(globals.disblEYES) {
+      filterList(this.eyeDisabilityList);
+      splitProvinces(this.eyeDisabilityList, "ocular");
+    }else
+      this.eyeDisabilityList.clear();
+
+    //EAR DISABILITY LIST
+    if(globals.disblEARS) {
+      filterList(this.earDisabilityList);
+      splitProvinces(this.earDisabilityList, "auditiva");
+    }
     else
-      eyeDisabilityList.clear();
-    if(globals.disblEARS)
-      filterList(earDisabilityList);
+      this.earDisabilityList.clear();
+
+    //TALK DISABILITY LIST
+    if(globals.disblTALK) {
+      filterList(this.talkDisabilityList);
+      splitProvinces(this.talkDisabilityList, "para hablar");
+    }
     else
-      earDisabilityList.clear();
-    if(globals.disblTALK)
-      filterList(talkDisabilityList);
+      this.talkDisabilityList.clear();
+
+    //WALK DISABILITY LIST
+    if(globals.disblWALK) {
+      filterList(this.walkDisabilityList);
+      splitProvinces(this.walkDisabilityList, "para caminar");
+    }
     else
-      talkDisabilityList.clear();
-    if(globals.disblMIND)
-      filterList(mentalDisabilityList);
+      this.earDisabilityList.clear();
+
+    //ARM DISABILITY LIST
+    if(globals.disblARMS) {
+      filterList(this.armDisabilityList);
+      splitProvinces(this.armDisabilityList, "de brazos o manos");
+    }
     else
-      mentalDisabilityList.clear();
+      this.armDisabilityList.clear();
+
+    //INTELLECT DISABILITY LIST
+    if(globals.disblINTEL) {
+      filterList(this.intellectDisabilityList);
+      splitProvinces(this.intellectDisabilityList, "intelectual");
+    }
+    else
+      this.intellectDisabilityList.clear();
+
+    if(globals.disblMIND) {
+      filterList(this.mentalDisabilityList);
+      splitProvinces(this.mentalDisabilityList, "mental");
+    }
+    else
+      this.mentalDisabilityList.clear();
 
   }
 
@@ -117,8 +154,134 @@ class DataProviderState extends State<DataProvider>{
       inputList.removeWhere((item) => item.ageGroup == "75plus");
   }
 
-  void removeFromList(List<DisabilitySeries> inputList, String toRemove){
+  void splitProvinces(List<DisabilitySeries> inputList, String disabilityType){
 
+    List<DisabilitySeries> tmpList = new List<DisabilitySeries>();
+    tmpList.clear();
+
+    //SAN JOSE
+    if(globals.provSJ == true){
+      for (var item in inputList) {
+        if (item.province == "SJ")
+          tmpList.add(item);
+      }
+      buildHelper(tmpList, "San José", disabilityType);
+      tmpList.clear();
+    }else
+      inputList.removeWhere((item) => item.province == "SJ");
+
+    //ALAJUELA
+    if(globals.provAL == true){
+      for (var item in inputList) {
+        if (item.province == "AL")
+          tmpList.add(item);
+      }
+      buildHelper(tmpList, "Alajuela", disabilityType);
+      tmpList.clear();
+    }else
+      inputList.removeWhere((item) => item.province == "AL");
+
+    //CARTAGO
+    if(globals.provCAR == true){
+      for (var item in inputList) {
+        if (item.province == "CAR")
+          tmpList.add(item);
+      }
+      buildHelper(tmpList, "Cartago", disabilityType);
+      tmpList.clear();
+    }else
+      inputList.removeWhere((item) => item.province == "CAR");
+
+    //HEREDIA
+    if(globals.provHER == true){
+      for (var item in inputList) {
+        if (item.province == "HER")
+          tmpList.add(item);
+      }
+      buildHelper(tmpList, "Heredia", disabilityType);
+      tmpList.clear();
+    }else
+      inputList.removeWhere((item) => item.province == "HER");
+
+    //GUANACASTE
+    if(globals.provGUAN == true){
+      for (var item in inputList) {
+        if (item.province == "GUAN")
+          tmpList.add(item);
+      }
+      buildHelper(tmpList, "Guanacaste", disabilityType);
+      tmpList.clear();
+    }else
+      inputList.removeWhere((item) => item.province == "GUAN");
+
+    //PUNTARENAS
+    if(globals.provPUN == true){
+      for (var item in inputList) {
+        if (item.province == "PUN")
+          tmpList.add(item);
+      }
+      buildHelper(tmpList, "Puntarenas", disabilityType);
+      tmpList.clear();
+    }else
+      inputList.removeWhere((item) => item.province == "PUN");
+
+    //LIMON
+    if(globals.provLIM == true){
+      for (var item in inputList) {
+        if (item.province == "LIM")
+          tmpList.add(item);
+      }
+      buildHelper(tmpList, "Limón", disabilityType);
+      tmpList.clear();
+    }else
+      inputList.removeWhere((item) => item.province == "LIM");
+  }
+
+  Widget chartTypeSelector(List<DisabilitySeries> inputList){
+    List<DisabilitySeries> maleList = getMaleList(inputList);
+    List<DisabilitySeries> femaleList = getFemaleList(inputList);
+    List<charts.Series<DisabilitySeries, String>> chartSeries = _createChartData(maleList, femaleList);
+    return GroupedBarChart.withExistingData(chartSeries);
+  }
+
+  static List<charts.Series<DisabilitySeries, String>> _createChartData(List<DisabilitySeries> maleList, List<DisabilitySeries> femaleList) {
+
+    return [
+      new charts.Series<DisabilitySeries, String>(
+        id: 'Hombres',
+        colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
+        domainFn: (DisabilitySeries amount, _) => amount.ageGroup,
+        measureFn: (DisabilitySeries amount, _) => amount.amount,
+        labelAccessorFn: (DisabilitySeries row, _) =>'${row.amount}',
+        data: maleList,
+      ),
+      new charts.Series<DisabilitySeries, String>(
+        id: 'Mujeres',
+        colorFn: (_, __) => charts.MaterialPalette.pink.shadeDefault,
+        domainFn: (DisabilitySeries amount, _) => amount.ageGroup,
+        measureFn: (DisabilitySeries amount, _) => amount.amount,
+        labelAccessorFn: (DisabilitySeries row, _) =>'${row.amount}',
+        data: femaleList,
+      ),
+    ];
+  }
+
+  List<DisabilitySeries> getMaleList(List<DisabilitySeries> inputList){
+    List<DisabilitySeries> outputList = new List<DisabilitySeries>();
+    for (var item in inputList) {
+      if(item.sex == "M")
+        outputList.add(item);
+    }
+    return outputList;
+  }
+
+  List<DisabilitySeries> getFemaleList(List<DisabilitySeries> inputList){
+    List<DisabilitySeries> outputList = new List<DisabilitySeries>();
+    for (var item in inputList) {
+      if(item.sex == "F")
+        outputList.add(item);
+    }
+    return outputList;
   }
 
   Future<List<DataSeries>> getDataFromJSON(BuildContext context) async{
@@ -127,10 +290,15 @@ class DataProviderState extends State<DataProvider>{
     return raw.map((f)=> DataSeries.fromJSON(f)).toList();
   }
 
-  void buildDisabilityLists(BuildContext context) async{
+  Future<void> buildUnfilteredList(BuildContext context) async{
+    widgetList.clear();
+    clearLists();
+
     if(unFilteredDataList.isEmpty)
       this.unFilteredDataList = await getDataFromJSON(context);
+  }
 
+  void buildDisabilityLists(){
     for (var item in unFilteredDataList) {
       eyeDisabilityList.add(DisabilitySeries("eyes", item.sex, item.age, item.province, item.eyeDisabled));
       earDisabilityList.add(DisabilitySeries("ears", item.sex, item.age, item.province, item.earDisabled));
@@ -143,20 +311,14 @@ class DataProviderState extends State<DataProvider>{
     print("Lists filled.");
   }
 
-  void rebuildDisabilityLists(BuildContext context){
-    clearLists();
-    buildDisabilityLists(context);
-  }
-
   void printData(){
-    print("People with eye disability: ");
     eyeDisabilityList.forEach((item) => print(item.toString()));
-//    earDisabilityList.forEach((item) => print(item.toString()));
-//    talkDisabilityList.forEach((item) => print(item.toString()));
-//    walkDisabilityList.forEach((item) => print(item.toString()));
-//    armDisabilityList.forEach((item) => print(item.toString()));
-//    intellectDisabilityList.forEach((item) => print(item.toString()));
-//    mentalDisabilityList.forEach((item) => print(item.toString()));
+    earDisabilityList.forEach((item) => print(item.toString()));
+    talkDisabilityList.forEach((item) => print(item.toString()));
+    walkDisabilityList.forEach((item) => print(item.toString()));
+    armDisabilityList.forEach((item) => print(item.toString()));
+    intellectDisabilityList.forEach((item) => print(item.toString()));
+    mentalDisabilityList.forEach((item) => print(item.toString()));
   }
 
   void clearLists(){
@@ -178,4 +340,75 @@ class DataProviderState extends State<DataProvider>{
       print("The unfiltered list is null.");
   }
 
+  String getProvinceName(String inputString){
+    switch (inputString) {
+      case "SJ":
+        {return "San José";}
+        break;
+
+      case "AL":
+        {return "Alajuela";}
+        break;
+
+      case "CAR":
+        {return("Cartago");}
+        break;
+
+      case "HER":
+        {return("Heredia");}
+        break;
+
+      case "GUAN":
+        {return("Guanacaste");}
+        break;
+
+      case "PUN":
+        {return("Puntarenas");}
+        break;
+
+      case "LIM":
+        {return("Limón");}
+        break;
+
+      default:
+        {return("Invalid choice");}
+        break;
+    }
+  }
+
+  String getDisabilityName(String inputString){
+    switch (inputString) {
+      case "eyes":
+        {return "ocular";}
+        break;
+
+      case "ears":
+        {return "auditiva";}
+        break;
+
+      case "talk":
+        {return("Cartago");}
+        break;
+
+      case "walk":
+        {return("Heredia");}
+        break;
+
+      case "arms":
+        {return("Guanacaste");}
+        break;
+
+      case "intellect":
+        {return("Puntarenas");}
+        break;
+
+      case "Mental":
+        {return("Limón");}
+        break;
+
+      default:
+        {return("Invalid choice");}
+        break;
+    }
+  }
 }

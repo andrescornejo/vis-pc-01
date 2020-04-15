@@ -1,20 +1,16 @@
 /// Bar chart example
-import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
+import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:vispc01/logic/disabilitySeries.dart';
 
-class SimpleBarChart extends StatelessWidget {
+class GroupedBarChart extends StatelessWidget {
   final List<charts.Series> seriesList;
   final bool animate;
 
-  SimpleBarChart(this.seriesList, {this.animate});
+  GroupedBarChart(this.seriesList, {this.animate});
 
-  /// Creates a [BarChart] with sample data and no transition.
-  factory SimpleBarChart.withSampleData() {
-    return new SimpleBarChart(
-      _createSampleData(),
-      // Disable animations for image tests.
-      animate: false,
-    );
+  factory GroupedBarChart.withExistingData(List<charts.Series<DisabilitySeries, String>> inputData) {
+    return new GroupedBarChart(inputData, animate: true);
   }
 
 
@@ -23,34 +19,32 @@ class SimpleBarChart extends StatelessWidget {
     return new charts.BarChart(
       seriesList,
       animate: animate,
-    );
+      barGroupingType: charts.BarGroupingType.grouped,
+      // Add the legend behavior to the chart to turn on legends.
+      // This example shows how to change the position and justification of
+      // the legend, in addition to altering the max rows and padding.
+      behaviors: [
+    new charts.SeriesLegend(
+    // Positions for "start" and "end" will be left and right respectively
+    // for widgets with a build context that has directionality ltr.
+    // For rtl, "start" and "end" will be right and left respectively.
+    // Since this example has directionality of ltr, the legend is
+    // positioned on the right side of the chart.
+    position: charts.BehaviorPosition.bottom,
+      // For a legend that is positioned on the left or right of the chart,
+      // setting the justification for [endDrawArea] is aligned to the
+      // bottom of the chart draw area.
+      outsideJustification: charts.OutsideJustification.middleDrawArea,
+      // By default, if the position of the chart is on the left or right of
+      // the chart, [horizontalFirst] is set to false. This means that the
+      // legend entries will grow as new rows first instead of a new column.
+      horizontalFirst: false,
+      // By setting this value to 2, the legend entries will grow up to two
+      // rows before adding a new column.
+      desiredMaxRows: 1,
+      // This defines the padding around each legend entry.
+      cellPadding: new EdgeInsets.only(right: 4.0, bottom: 4.0),
+    )]);
   }
 
-  /// Create one series with sample hard coded data.
-  static List<charts.Series<OrdinalSales, String>> _createSampleData() {
-    final data = [
-      new OrdinalSales('2014', 5),
-      new OrdinalSales('2015', 25),
-      new OrdinalSales('2016', 100),
-      new OrdinalSales('2017', 75),
-    ];
-
-    return [
-      new charts.Series<OrdinalSales, String>(
-        id: 'Sales',
-        colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
-        domainFn: (OrdinalSales sales, _) => sales.year,
-        measureFn: (OrdinalSales sales, _) => sales.sales,
-        data: data,
-      )
-    ];
-  }
-}
-
-/// Sample ordinal data type.
-class OrdinalSales {
-  final String year;
-  final int sales;
-
-  OrdinalSales(this.year, this.sales);
 }
