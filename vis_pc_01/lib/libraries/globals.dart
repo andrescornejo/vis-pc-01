@@ -16,4 +16,4 @@ bool age0to14 = true, age15to34 = true, age35to54 = true, age55to74 = true,
     age75plus = true;
 
 //Booleans for chart type:
-bool chartBubble = true, chartSquare = false, barChart = false;
+bool chartBubble = false, chartDonut = false, barChart = true;

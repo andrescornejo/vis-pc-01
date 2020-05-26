@@ -15,6 +15,7 @@ import 'dart:convert';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
 import 'package:vispc01/charts/barChart.dart';
+import 'package:vispc01/charts/pieChart.dart';
 import 'package:vispc01/logic/dataSeries.dart';
 import 'package:vispc01/logic/disabilitySeries.dart';
 import 'package:vispc01/libraries/globals.dart' as globals;
@@ -52,29 +53,6 @@ class DataProviderState extends State<DataProvider>{
       widgetList.add(Text("List Empty"));
 
     return Column(children: widgetList);
-  }
-
-  void buildHelper(List<DisabilitySeries> inputList, String provinceName, String disabilityName){
-    widgetList.add(Container(
-        height: 520,    //Hardcoded :( This is for a 1080 x 1920 screen.
-        padding: EdgeInsets.all(10),
-        child: Card(
-            child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  children: <Widget>[
-                    Text("Población con discapacidad " + disabilityName + " en " + provinceName,
-                      style: Theme.of(context).textTheme.body2,
-                    ),
-                    Expanded(
-                        child: chartTypeSelector(inputList) //CHART GOES HERE
-                    )
-                  ],
-                )
-            )
-        )
-    ),
-    );
   }
 
   /* The master filter
@@ -241,7 +219,38 @@ class DataProviderState extends State<DataProvider>{
     List<DisabilitySeries> maleList = getMaleList(inputList);
     List<DisabilitySeries> femaleList = getFemaleList(inputList);
     List<charts.Series<DisabilitySeries, String>> chartSeries = _createChartData(maleList, femaleList);
-    return GroupedBarChart.withExistingData(chartSeries);
+    if(globals.barChart) {
+
+      return GroupedBarChart.withExistingData(chartSeries);
+    }
+    else {
+      DonutChart maleChart = DonutChart.withExistingData(maleList, "Hombres");
+      return maleChart;
+    }
+  }
+
+  void buildHelper(List<DisabilitySeries> inputList, String provinceName, String disabilityName){
+    widgetList.add(
+      Container(
+          height: 520,    //Hardcoded :( This is for a 1080 x 1920 screen.
+          padding: EdgeInsets.all(10),
+          child: Card(
+              child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    children: <Widget>[
+                      Text("Población con discapacidad " + disabilityName + " en " + provinceName,
+                        style: Theme.of(context).textTheme.body2,
+                      ),
+                      Expanded(
+                          child: chartTypeSelector(inputList) //CHART GOES HERE
+                      )
+                    ],
+                  )
+              )
+          )
+      ),
+    );
   }
 
   static List<charts.Series<DisabilitySeries, String>> _createChartData(List<DisabilitySeries> maleList, List<DisabilitySeries> femaleList) {
@@ -252,7 +261,6 @@ class DataProviderState extends State<DataProvider>{
         colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
         domainFn: (DisabilitySeries amount, _) => amount.ageGroup,
         measureFn: (DisabilitySeries amount, _) => amount.amount,
-        labelAccessorFn: (DisabilitySeries row, _) =>'${row.amount}',
         data: maleList,
       ),
       new charts.Series<DisabilitySeries, String>(
@@ -260,7 +268,6 @@ class DataProviderState extends State<DataProvider>{
         colorFn: (_, __) => charts.MaterialPalette.pink.shadeDefault,
         domainFn: (DisabilitySeries amount, _) => amount.ageGroup,
         measureFn: (DisabilitySeries amount, _) => amount.amount,
-        labelAccessorFn: (DisabilitySeries row, _) =>'${row.amount}',
         data: femaleList,
       ),
     ];

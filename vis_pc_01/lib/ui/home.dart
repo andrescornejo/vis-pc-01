@@ -7,6 +7,8 @@ import 'package:vispc01/ui/infoScreen.dart';
 import 'package:vispc01/charts/scatterPlotChart.dart';
 import 'dart:convert';
 
+import 'chartTypeSelector.dart';
+
 
 
 class HomePage extends StatelessWidget {
@@ -52,7 +54,11 @@ class HomePage extends StatelessWidget {
                 disabledColor: Colors.lightBlue[600],
               ),
               FlatButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => ChartTypeSelector())
+                  );
+                },
                 child: Icon(Icons.insert_chart),
                 disabledColor: Colors.lightBlue[600],
               ),
